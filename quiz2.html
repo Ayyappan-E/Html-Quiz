@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<div class="container">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Program</title>
+<link rel="stylesheet" href="design.css"> <!-- Add CSS for styling -->
+</head>
+<body>
+  <h1>Welcome to the java Quiz!</h1>
+  <div id="quiz">
+    <p id="question"></p>
+    <div id="options"></div>
+    <button onclick="checkAnswer()">Submit</button>
+  </div>
+  <div id="result" style="display: none;">
+    <h2>Results</h2>
+    <p id="score"></p>
+    <div id="wrong-answers"></div>
+    <button onclick="retry()">Retry</button>
+  </div>
+
+<script>
+  const questions = [
+   
+    {
+      question: "Number of primitive data types in java are?",
+      options: ["6", "7", "8", "9"],
+      answer: 2
+    },
+ {
+        question: "Which of the following option leads to the portability and security of Java?",
+        options: ["Bytecode is executed by JVM","The applet makes the Java code secure and portable", "Use of exception handling", "Dynamic binding between objects"],
+        answer: 0
+    },
+    {
+        question: "Which of the following is not a Java features?",
+        options: ["Dynamic", "Architecture Neutral","Use of pointers","Object-oriented"],
+        answer: 2
+    },
+    {
+        question: " _____ is used to find and fix bugs in the Java programs.",
+        options: ["JVM", "JRE","JDK","JDB"],
+        answer: 3
+    },
+    {
+        question: "What do you mean by nameless objects?",
+        options: ["An object that has no reference.", "An object without having any name but having a reference.","An object of a superclass created in the subclass.","An object created by using the new keyword."],
+        answer: 0
+    },
+    {
+        question: "Which option is false about the final keyword?",
+        options: ["A final method cannot be overridden in its subclasses.", "A final class cannot be extended.","A final class cannot extend other classes.","A final method can be inherited."],
+        answer: 2
+    },
+    {
+        question: "Which keyword is used for accessing the features of a package?",
+        options: ["package", "import","extends","export"],
+        answer: 1
+    },
+    {
+        question: "What is meant by the classes and objects that dependents on each other?",
+        options: ["Loose Coupling","Cohesion","Tight Coupling","None of the above"],
+        answer: 2
+    },
+    {
+        question: "9.In the following method declaration, what is the return type? public static int myMethod(int count, double value) {     return 4; }",
+        options: ["value", "double","void"," int "],
+        answer: 3
+    },
+    {
+        question: "10.Which is a valid keyword in java?",
+        options: ["interface", "string","Float"," unsigned "],
+        answer: 0
+    },
+    
+  ];
+
+  let currentQuestion = 0;
+  let score = 0;
+  let wrongAnswers = [];
+
+  function displayQuestion() {
+    const questionElement = document.getElementById('question');
+    const optionsElement = document.getElementById('options');
+    const current = questions[currentQuestion];
+
+    questionElement.textContent = current.question;
+    optionsElement.innerHTML = '';
+
+    current.options.forEach((option, index) => {
+      const button = document.createElement('button');
+      button.textContent = option;
+      button.onclick = () => checkOption(index);
+      optionsElement.appendChild(button);
+    });
+  }
+
+  function checkOption(index) {
+    if (index === questions[currentQuestion].answer) {
+      score++;
+    } else {
+      wrongAnswers.push({
+        question: questions[currentQuestion].question,
+        correctAnswer: questions[currentQuestion].options[questions[currentQuestion].answer]
+      });
+    }
+
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+      displayQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    const resultElement = document.getElementById('result');
+    const scoreElement = document.getElementById('score');
+    const wrongAnswersElement = document.getElementById('wrong-answers');
+
+    resultElement.style.display = 'block';
+    scoreElement.textContent = `Your score is ${score}/${questions.length}`;
+
+    if (wrongAnswers.length > 0) {
+      let wrongHtml = '<h3>Incorrect Answers:</h3>';
+      wrongAnswers.forEach((item, index) => {
+        wrongHtml += `<p>${index + 1}. ${item.question} - Correct Answer: ${item.correctAnswer}</p>`;
+      });
+      wrongAnswersElement.innerHTML = wrongHtml;
+    } else {
+      wrongAnswersElement.innerHTML = '<p>Congratulations! You got all questions right!</p>';
+    }
+  }
+
+  function retry() {
+    currentQuestion = 0;
+    score = 0;
+    wrongAnswers = [];
+    displayQuestion();
+    document.getElementById('result').style.display = 'none';
+  }
+
+  displayQuestion();
+</script>
+</body>
+</html>
+
